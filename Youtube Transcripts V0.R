@@ -2,7 +2,7 @@
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tune, workflows, dials, hardhat, parsnip, textrecipes, rsample, netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
 dfTranscript <- readRDS("~/YoutubeTranscript/YoutubeTranscript/dfTranscript.Rda") 
-
+funca? 
 #### Scrap ----
 # https://stackoverflow.com/questions/51014205/automating-opening-transcript-for-youtube-automatic-generated-captions
 rs_driver_object <- rsDriver(browser = 'chrome',
