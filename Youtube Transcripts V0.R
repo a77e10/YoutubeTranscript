@@ -1,17 +1,10 @@
 #### Set Up ----
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
-dfTranscript <- readRDS("~/YoutubeTranscript/dfTranscript.Rda") 
-rm(dfTranscript)cambios
+pacman::p_load(tune, workflows, dials, hardhat, parsnip, textrecipes, rsample, netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
+dfTranscript <- readRDS("~/YoutubeTranscript/YoutubeTranscript/dfTranscript.Rda") 
 
 #### Scrap ----
 # https://stackoverflow.com/questions/51014205/automating-opening-transcript-for-youtube-automatic-generated-captions
-
-install.packages("netstat")
-install.packages("netstat")
-require(RSelenium)
-require(netstat)
-
 rs_driver_object <- rsDriver(browser = 'chrome',
                              chromever = '100.0.4896.60',
                              verbose = FALSE,
@@ -108,24 +101,26 @@ dfTranscriptA$viewsCol <- as.numeric(dfTranscriptA$viewsCol)
 dfTranscriptB <- dfTranscriptA %>% mutate(group=if_else(str_detect(dfTranscriptA$titleCol,"Ask|(?i)cheeseman"),"Ask the Cheeseman",
                                                         if_else(str_detect(dfTranscriptA$titleCol,"(?i)how|(?i)make|(?i)making|Day"), "Cheesemaking", 
                                                                 if_else(str_detect(dfTranscriptA$titleCol,"(?i)test|(?i)taste"), "Testings", "Others"))))
+dfTranscriptC <- dfTranscriptB 
 dfTranscriptB <- dfTranscriptB %>% filter(!group %in% c('Others'))
 
+#### Classification ----
 set.seed(1234)
 multinews_split <- initial_split(dfTranscriptB, strata = group)
 multinews_train <- training(multinews_split)
 multinews_test <- testing(multinews_split)
 
 multinews_train %>%
-  group_by(tipo) %>% summarise(n = n()) %>%
+  group_by(group) %>% summarise(n = n()) %>%
   mutate(share = n/sum(n)) %>%
   select(group, n, share) %>% arrange(share)
 
 multinews_rec <-
-  recipe(tipo ~ textCol,
+  recipe(group ~ textCol,
          data = multinews_train) %>%
   step_tokenize(textCol) %>%
   step_stopwords(textCol, language = 'en') %>%
-  step_tokenfilter(text, max_tokens = 1e3, min_times = 100) %>%
+  step_tokenfilter(textCol, max_tokens = 1e3, min_times = 100) %>%
   step_tfidf(textCol)
 
 multinews_folds <- vfold_cv(multinews_train)
@@ -167,22 +162,20 @@ multi_lasso_rs %>%
   collect_predictions() %>%
   filter(penalty == best_acc$penalty) %>%
   filter(id == "Fold01") %>%
-  conf_mat(tipo, .pred_class) %>%
+  conf_mat(group, .pred_class) %>%
   autoplot(type = "heatmap") +
   scale_y_discrete(labels = function(x) str_wrap(x, 20)) +
   scale_x_discrete(labels = function(x) str_wrap(x, 20))
 
 finalMulti_wf0 <- finalize_workflow(multi_lasso_wf, choose_acc)
 #En este momento aplicamos el wf a nuestros datos, por un lado determinamos el modelo con nuestro training set y dps lo evaluamos con el test set. En final fitted están todos los resultados
-finalMulti_wf <- last_fit(finalMulti_wf, multinews_split)
+finalMulti_wf <- last_fit(finalMulti_wf0, multinews_split)
 #Nos tiraba un error al tratar de usar el fit del final fitted a través dell pull_wf_fit y dps predict. Usamos como alternativa fit sobre el training set https://stackoverflow.com/questions/63334046/how-to-simulate-last-fit-using-fit-in-tidymodels
 finalMulti_fitted <- finalMulti_wf0 %>% fit(training(multinews_split))
-news_bind <- predict(finalMulti_fitted,newsallDFtodo) %>%
-  bind_cols(newsallDFtodo)
+dfTranscriptC <- predict(finalMulti_fitted,dfTranscriptC) %>%
+  bind_cols(dfTranscriptC)
 saveRDS(news_bind, file = "videoPredMulti.Rda") #Guardamos el df solamente
-# WriteXLS(news_bind, ExcelFileName = 'newsallPredMulti.xls')
 
-collect_metrics(finalMulti_wf0)
 
 #LDA ----
 delete_words <- c('cheese','milk', 'yeah', 'cheeses',"cheese's",'video','lot')
