@@ -1,0 +1,600 @@
+﻿Class,Variety
+Hard,Abbaye du Mont des Cats
+Hard,Abertam
+Hard,Ackawi
+Hard,Acorn
+Hard,Allgauer Emmentaler
+Hard,Anejo Enchilado
+Hard,Anthoriro
+Hard,Ardi Gasna
+Hard,Asiago
+Hard,Balaton
+Hard,Barry's Bay Cheddar
+Hard,Basing
+Hard,Bavarian Bergkase
+Hard,Beauvoorde
+Hard,Berkswell
+Hard,Blue
+Hard,Boeren Leidenkaas
+Hard,Bra
+Hard,Buffalo
+Hard,Cabrales
+Hard,Caerphilly
+Hard,Cairnsmore
+Hard,Canestrato
+Hard,Castellano
+Hard,Castelleno
+Hard,Castelmagno
+Hard,Castigliano
+Hard,Comte
+Hard,Coolea
+Hard,Coquetdale
+Hard,Corleggy
+Hard,Cotherstone
+Hard,Cotija
+Hard,Coverdale
+Hard,Crayeux de Roncq
+Hard,Crottin de Chavignol
+Hard,Curworthy
+Hard,Cwmtawe Pecorino
+Hard,Denhany Dorset Drum
+Hard,Derby
+Hard,Doolin
+Hard,Dorset Blue Vinney
+Hard,Double Worcester
+Hard,Dry Jack
+Hard,Duddleswell
+Hard,Dunlop
+Hard,Duroblando
+Hard,Dutch Mimolette (Commissiekaas)
+Hard,Emmental
+Hard,Etorki
+Hard,Evora De L'Alentejo
+Hard,Finlandia Swiss
+Hard,Fiore Sardo
+Hard,Folded cheese with mint
+Hard,Four Herb Gouda
+Hard,Fourme de Montbrison
+Hard,Fribourgeois
+Hard,Friesekaas
+Hard,Friesian
+Hard,Fromage a Raclette
+Hard,Frying Cheese
+Hard,Gabriel
+Hard,Gammelost
+Hard,Gaperon a l'Ail
+Hard,Garrotxa
+Hard,Gornyaltajski
+Hard,Gospel Green
+Hard,Gowrie
+Hard,Grafton Village Cheddar
+Hard,Grana
+Hard,Grana Padano
+Hard,Graviera
+Hard,Gruyere
+Hard,Halloumi
+Hard,Halloumy (Australian)
+Hard,Haloumi-Style Cheese
+Hard,Heidi Gruyere
+Hard,Herriot Farmhouse
+Hard,Iberico
+Hard,Idaho Goatster
+Hard,Idiazabal
+Hard,Isle of Mull
+Hard,Jarlsberg
+Hard,Jindi Brie
+Hard,Kadchgall
+Hard,Kefalotyri
+Hard,Laguiole
+Hard,Lairobell
+Hard,Lancashire
+Hard,Laruns
+Hard,Lavistown
+Hard,Leafield
+Hard,Leicester
+Hard,Leyden
+Hard,Lincolnshire Poacher
+Hard,Llanboidy
+Hard,Llanglofan Farmhouse
+Hard,Loch Arthur Farmhouse
+Hard,Longhorn
+Hard,Lou Palou
+Hard,Mahon
+Hard,Malvern
+Hard,Manchego
+Hard,Manur
+Hard,Marble Cheddar
+Hard,Menallack Farmhouse
+Hard,Mihalic Peynir
+Hard,Montasio
+Hard,Monterey Jack Dry
+Hard,Northumberland
+Hard,Orkney Extra Mature Cheddar
+Hard,Oschtjepka
+Hard,Parmesan (Parmigiano)
+Hard,Parmigiano Reggiano
+Hard,Pecorino
+Hard,Pecorino Romano
+Hard,Penbryn
+Hard,Piora
+Hard,Plymouth Cheese
+Hard,Pressato
+Hard,Pyengana Cheddar
+Hard,Queso del Tietar
+Hard,Queso Iberico
+Hard,Queso Majorero
+Hard,Queso Para Frier
+Hard,Raclette
+Hard,Ragusano
+Hard,Reggianito
+Hard,Remedou
+Hard,Ricotta Salata
+Hard,Romano
+Hard,Roncal
+Hard,Saanenkaese
+Hard,Sainte Maure
+Hard,Salers
+Hard,Sancerre
+Hard,Sap Sago
+Hard,Sardo
+Hard,Sardo Egyptian
+Hard,Sbrinz
+Hard,Schabzieger
+Hard,Serat
+Hard,Seriously Strong Cheddar
+Hard,Shelburne Cheddar
+Hard,Shropshire Blue
+Hard,Smoked Gouda
+Hard,Spenwood
+Hard,Sraffordshire Organic
+Hard,Stinking Bishop
+Hard,Swaledale
+Hard,Swiss
+Hard,Syrian (Armenian String)
+Hard,Tala
+Hard,Teifi
+Hard,Tillamook Cheddar
+Hard,Tomme d'Abondance
+Hard,Tyn Grug
+Hard,Tyning
+Hard,Ubriaco
+Hard,Wellington
+Hard,Wensleydale
+Hard,White Stilton
+Hard,Xynotyro
+Hard,Yarg Cornish
+Hard,Zamorano
+Hard,Zanetti Grana Padano
+Hard,Zanetti Parmigiano Reggiano
+Semi-hard,Abbaye de Belloc
+Semi-hard,Abondance
+Semi-hard,Airedale
+Semi-hard,Alverca
+Semi-hard,Appenzell
+Semi-hard,Aragon
+Semi-hard,Ardrahan
+Semi-hard,Aubisque Pyrenees
+Semi-hard,Beaufort
+Semi-hard,Bierkase
+Semi-hard,Blarney
+Semi-hard,Bleu de Septmoncel
+Semi-hard,Braudostur
+Semi-hard,Brick
+Semi-hard,Canadian Cheddar
+Semi-hard,Cantal
+Semi-hard,Chaumes
+Semi-hard,Cheddar
+Semi-hard,Cheshire
+Semi-hard,Chevres
+Semi-hard,Chontaleno
+Semi-hard,Cojack
+Semi-hard,Colby-Jack
+Semi-hard,Crowley
+Semi-hard,Devon Blue
+Semi-hard,Devon Garland
+Semi-hard,Double Gloucester
+Semi-hard,Edam
+Semi-hard,Edelpilz
+Semi-hard,Esbareich
+Semi-hard,Esrom
+Semi-hard,Filetta
+Semi-hard,Fontal
+Semi-hard,Fourme d' Ambert
+Semi-hard,Friesla
+Semi-hard,Fynbo
+Semi-hard,Geitost
+Semi-hard,Gjetost
+Semi-hard,Gloucester
+Semi-hard,Gouda
+Semi-hard,Goutu
+Semi-hard,Grabetto
+Semi-hard,Graddost
+Semi-hard,Greve
+Semi-hard,Herrgardsost
+Semi-hard,Herve
+Semi-hard,Juustoleipa
+Semi-hard,Kikorangi
+Semi-hard,Leerdammer
+Semi-hard,Maasdam
+Semi-hard,Mamirolle
+Semi-hard,Maribo
+Semi-hard,Matocq
+Semi-hard,Meira
+Semi-hard,Menonita
+Semi-hard,Meyer Vintage Gouda
+Semi-hard,Mimolette
+Semi-hard,Mixte
+Semi-hard,Molbo
+Semi-hard,Mondseer
+Semi-hard,Monterey Jack
+Semi-hard,Murol
+Semi-hard,Nokkelost
+Semi-hard,Orla
+Semi-hard,Ossau Fermier
+Semi-hard,Ossau-Iraty
+Semi-hard,Oszczypek
+Semi-hard,Passendale
+Semi-hard,Penamellera
+Semi-hard,Petit Pardou
+Semi-hard,Podhalanski
+Semi-hard,Port-Salut
+Semi-hard,Prastost
+Semi-hard,Provolone
+Semi-hard,Provolone (Australian)
+Semi-hard,Rabacal
+Semi-hard,Ridder
+Semi-hard,Roquefort
+Semi-hard,Royalp Tilsit
+Semi-hard,Saaland Pfarr
+Semi-hard,Sage Derby
+Semi-hard,Saint-Paulin
+Semi-hard,Samso
+Semi-hard,San Simon
+Semi-hard,Schloss
+Semi-hard,Siraz
+Semi-hard,Stilton
+Semi-hard,String
+Semi-hard,Sveciaost
+Semi-hard,Sweet Style Swiss
+Semi-hard,Tasmania Highland Chevre Log
+Semi-hard,Testouri
+Semi-hard,Tete de Moine
+Semi-hard,Tibet
+Semi-hard,Tilsit
+Semi-hard,Toma
+Semi-hard,Tomme de Romans
+Semi-hard,Tommes
+Semi-hard,Toscanello
+Semi-hard,Touree de L'Aubier
+Semi-hard,Tourmalet
+Semi-hard,Trappe (Veritable)
+Semi-hard,Turunmaa
+Semi-hard,Vasterbottenost
+Semi-hard,Waimata Farmhouse Blue
+Semi-hard,Yorkshire Blue
+Semi-soft,Adelost
+Semi-soft,Airag
+Semi-soft,Aisy Cendre
+Semi-soft,American Cheese
+Semi-soft,Ami du Chambertin
+Semi-soft,Aromes au Gene de Marc
+Semi-soft,Asadero
+Semi-soft,Autun
+Semi-soft,Baby Swiss
+Semi-soft,Beenleigh Blue
+Semi-soft,Bel Paese
+Semi-soft,Bergere Bleue
+Semi-soft,Beyaz Peynir
+Semi-soft,Bishop Kennedy
+Semi-soft,Bocconcini (Australian)
+Semi-soft,Boulette d'Avesnes
+Semi-soft,Brillat-Savarin
+Semi-soft,Brin
+Semi-soft,Bruder Basil
+Semi-soft,Butterkase
+Semi-soft,Calenzana
+Semi-soft,Casciotta di Urbino
+Semi-soft,Celtic Promise
+Semi-soft,Charolais
+Semi-soft,Chevrotin des Aravis
+Semi-soft,Colby
+Semi-soft,Cougar Gold
+Semi-soft,Cream Havarti
+Semi-soft,Croghan
+Semi-soft,Curd
+Semi-soft,Danbo
+Semi-soft,Danish Fontina
+Semi-soft,Dauphin
+Semi-soft,Durrus
+Semi-soft,Feta (Australian)
+Semi-soft,Folded
+Semi-soft,Fontina Val d'Aosta
+Semi-soft,Fresh Jack
+Semi-soft,Fromage de Montagne de Savoie
+Semi-soft,Gubbeen
+Semi-soft,Havarti
+Semi-soft,Hipi Iti
+Semi-soft,Hushallsost
+Semi-soft,Il Boschetto al Tartufo
+Semi-soft,King River Gold
+Semi-soft,Lajta
+Semi-soft,Langres
+Semi-soft,Lappi
+Semi-soft,Le Brin
+Semi-soft,Le Fium Orbo
+Semi-soft,Livarot
+Semi-soft,Loddiswell Avondale
+Semi-soft,Maroilles
+Semi-soft,Milleens
+Semi-soft,Monastery Cheeses
+Semi-soft,Morbier
+Semi-soft,Morbier Cru de Montagne
+Semi-soft,Mozzarella (Australian)
+Semi-soft,Neufchatel (Australian)
+Semi-soft,Oaxaca
+Semi-soft,Paneer
+Semi-soft,Pasteurized Processed
+Semi-soft,Pave d'Auge
+Semi-soft,Pepper jack
+Semi-soft,Picos de Europa
+Semi-soft,Pinconning
+Semi-soft,Polkolbin
+Semi-soft,Pont l'Eveque
+Semi-soft,Port Nicholson
+Semi-soft,Quartirolo Lombardo
+Semi-soft,Queso Blanco con Frutas --Pina y Mango
+Semi-soft,Raschera
+Semi-soft,Reblochon
+Semi-soft,Rocamadour
+Semi-soft,Rollot
+Semi-soft,Rubens
+Semi-soft,Saint-Nectaire
+Semi-soft,Sonoma Jack
+Semi-soft,Sottocenare al Tartufo
+Semi-soft,Sourire Lozerien
+Semi-soft,Taleggio
+Semi-soft,Tamie
+Semi-soft,Tetilla
+Semi-soft,Tomme de Chevre
+Semi-soft,Tomme de Savoie
+Semi-soft,Tronchon
+Semi-soft,Ulloa
+Semi-soft,Waterloo
+Semi-soft,Wigmore
+Soft,Ambert
+Soft,Anneau du Vic-Bilh
+Soft,Avaxtskyr
+Soft,Babybel
+Soft,Baguette Laonnaise
+Soft,Bakers
+Soft,Baladi
+Soft,Bandal
+Soft,Banon
+Soft,Basket Cheese
+Soft,Bath Cheese
+Soft,Beer Cheese
+Soft,Bergader
+Soft,Bleu d'Auvergne
+Soft,Bleu de Gex
+Soft,Bleu de Laqueuille
+Soft,Bleu Des Causses
+Soft,Blue Castello
+Soft,Bonchester
+Soft,Bosworth
+Soft,Bougon
+Soft,Boursault
+Soft,Boursin
+Soft,Bouyssou
+Soft,Breakfast Cheese
+Soft,Brebis du Lavort
+Soft,Brebis du Lochois
+Soft,Brebis du Puyfaucon
+Soft,Bresse Bleu
+Soft,Brie
+Soft,Brie de Meaux
+Soft,Brie de Melun
+Soft,Brin d' Amour
+Soft,Brin d'Amour
+Soft,Brinza (Burduf Brinza)
+Soft,Briquette de Brebis
+Soft,Broccio
+Soft,Broccio Demi-Affine
+Soft,Brousse du Rove
+Soft,Brusselae Kaas (Fromage de Bruxelles)
+Soft,Bryndza
+Soft,Buchette d'Anjou
+Soft,Butte
+Soft,Button (Innes)
+Soft,Buxton Blue
+Soft,Cabecou
+Soft,Caboc
+Soft,Cachaille
+Soft,Caciocavallo
+Soft,Caciotta
+Soft,Camembert de Normandie
+Soft,Caprice des Dieux
+Soft,Capricorn Goat
+Soft,Caravane
+Soft,Carre de l'Est
+Soft,Cashel Blue
+Soft,Castelo Branco
+Soft,Cathelain
+Soft,Cendre d'Olivet
+Soft,Cerney
+Soft,Chabichou
+Soft,Chabichou du Poitou
+Soft,Chabis de Gatine
+Soft,Chaource
+Soft,Civray
+Soft,Coeur de Camembert au Calvados
+Soft,Coeur de Chevre
+Soft,Cold Pack
+Soft,Cooleney
+Soft,Cornish Pepper
+Soft,Cottage Cheese
+Soft,Cottage Cheese (Australian)
+Soft,Coulommiers
+Soft,Cream Cheese
+Soft,Crema Agria
+Soft,Crema Mexicana
+Soft,Creme Fraiche
+Soft,Crottin du Chavignol
+Soft,Cuajada
+Soft,Cure Nantais
+Soft,Daralagjazsky
+Soft,Delice des Fiouves
+Soft,Dessertnyj Belyj
+Soft,Dolcelatte
+Soft,Doppelrhamstufel
+Soft,Dreux a la Feuille
+Soft,Dunbarra
+Soft,Emlett
+Soft,Evansdale Farmhouse Brie
+Soft,Explorateur
+Soft,Farmer
+Soft,Feta
+Soft,Figue
+Soft,Fin-de-Siecle
+Soft,Finn
+Soft,Fleur du Maquis
+Soft,Flor de Guia
+Soft,Flower Marie
+Soft,Fondant de Brebis
+Soft,Fontainebleau
+Soft,Fougerus
+Soft,Fourme de Haute Loire
+Soft,Fresh Mozzarella
+Soft,Fresh Ricotta
+Soft,Frinault
+Soft,Fromage Corse
+Soft,Fromage Frais
+Soft,Fruit Cream Cheese
+Soft,Galette du Paludier
+Soft,Galette Lyonnaise
+Soft,Gastanberra
+Soft,Golden Cross
+Soft,Gorgonzola
+Soft,Grand Vatel
+Soft,Grataron d' Areches
+Soft,Gratte-Paille
+Soft,Greuilh
+Soft,Gris de Lille
+Soft,Guerbigny
+Soft,Hereford Hop
+Soft,Humboldt Fog
+Soft,Jubilee Blue
+Soft,Kenafa
+Soft,Kernhem
+Soft,Kervella Affine
+Soft,King Island Cape Wickham Brie
+Soft,Klosterkaese
+Soft,Kugelkase
+Soft,L'Aveyronnais
+Soft,L'Ecir de l'Aubrac
+Soft,La Taupiniere
+Soft,La Vache Qui Rit
+Soft,Le Lacandou
+Soft,Le Roule
+Soft,Lebbene
+Soft,Limburger
+Soft,Lingot Saint Bousquet d'Orb
+Soft,Little Rydings
+Soft,Lyonnais
+Soft,Macconais
+Soft,Mahoe Aged Gouda
+Soft,Maredsous
+Soft,Margotin
+Soft,Mascarpone
+Soft,Mascarpone (Australian)
+Soft,Mascarpone Torta
+Soft,Metton (Cancoillotte)
+Soft,Mine-Gabhar
+Soft,Mothais a la Feuille
+Soft,Mozzarella
+Soft,Mozzarella di Bufala
+Soft,"Mozzarella Fresh, in water"
+Soft,Mozzarella Rolls
+Soft,Munster
+Soft,Mycella
+Soft,Myzithra
+Soft,Nantais
+Soft,Neufchatel
+Soft,Niolo
+Soft,Olivet au Foin
+Soft,Olivet Cendre
+Soft,P'tit Berrichon
+Soft,Palet de Babligny
+Soft,Panela
+Soft,Pannerone
+Soft,Pant ys Gawn
+Soft,Pate de Fromage
+Soft,Patefine Fort
+Soft,Pave d'Affinois
+Soft,Pave de Chirac
+Soft,Peekskill Pyramid
+Soft,Pelardon des Cevennes
+Soft,Pelardon des Corbieres
+Soft,Pencarreg
+Soft,Petit-Suisse
+Soft,Picodon de Chevre
+Soft,Pithtviers au Foin
+Soft,Plateau de Herve
+Soft,Poivre d'Ane
+Soft,Pouligny-Saint-Pierre
+Soft,Pourly
+Soft,Prince-Jean
+Soft,Provel
+Soft,Pyramide
+Soft,Quark
+Soft,Quark (Australian)
+Soft,Quatre-Vents
+Soft,Quercy Petit
+Soft,Queso Blanco
+Soft,Queso de Murcia
+Soft,Queso del Montsec
+Soft,Queso Fresco
+Soft,Queso Fresco (Adobera)
+Soft,Queso Jalapeno
+Soft,Queso Quesadilla
+Soft,Regal de la Dombes
+Soft,Requeson
+Soft,Richelieu
+Soft,Ricotta
+Soft,Ricotta (Australian)
+Soft,Rigotte
+Soft,Romans Part Dieu
+Soft,Rouleau De Beaulieu
+Soft,Rustinu
+Soft,Saga
+Soft,Saint-Marcellin
+Soft,Scamorza
+Soft,Selles sur Cher
+Soft,Selva
+Soft,Serra da Estrela
+Soft,Sharpam
+Soft,Sirene
+Soft,Somerset Brie
+Soft,Soumaintrain
+Soft,Sussex Slipcote
+Soft,Taupiniere
+Soft,Telemea
+Soft,Texas Goat Cheese
+Soft,Timboon Brie
+Soft,Tomme des Chouans
+Soft,Torta del Casar
+Soft,Trois Cornes De Vendee
+Soft,Truffe
+Soft,Tupi
+Soft,Tymsboro
+Soft,Vacherin-Fribourgeois
+Soft,Valencay
+Soft,Venaco
+Soft,Vendomois
+Soft,Vieux Corse
+Soft,Vignotte
+Soft,Vulscombe
+Soft,Washed Rind Cheese (Australian)
+Soft,Weichkaese
+Soft,Whitestone Farmhouse
+Soft,Woodside Cabecou
+Soft,Yarra Valley Pyramid

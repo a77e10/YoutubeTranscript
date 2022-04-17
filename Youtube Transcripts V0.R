@@ -2,9 +2,8 @@
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tune, workflows, dials, hardhat, parsnip, textrecipes, rsample, netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
 dfTranscript <- readRDS("~/YoutubeTranscript/YoutubeTranscript/dfTranscript.Rda") 
-pppp
-va todo
-acá estoy poniendo otra cosa distinta
+CheeseVarieties <- read_csv("CheeseVarieties.csv")
+
 #### Scrap ----
 # https://stackoverflow.com/questions/51014205/automating-opening-transcript-for-youtube-automatic-generated-captions
 rs_driver_object <- rsDriver(browser = 'chrome',
@@ -103,8 +102,35 @@ dfTranscriptA$viewsCol <- as.numeric(dfTranscriptA$viewsCol)
 dfTranscriptB <- dfTranscriptA %>% mutate(group=if_else(str_detect(dfTranscriptA$titleCol,"Ask|(?i)cheeseman"),"Ask the Cheeseman",
                                                         if_else(str_detect(dfTranscriptA$titleCol,"(?i)how|(?i)make|(?i)making|Day"), "Cheesemaking", 
                                                                 if_else(str_detect(dfTranscriptA$titleCol,"(?i)test|(?i)taste"), "Testings", "Others"))))
-dfTranscriptC <- dfTranscriptB 
+dfTranscriptC <- dfTranscriptB # dejamos el C con sin filtrar y en la clasificación le agregamos la columna de group
 dfTranscriptB <- dfTranscriptB %>% filter(!group %in% c('Others'))
+
+# Repetimos la parte de LDA
+delete_words <- c('cheese','milk', 'yeah', 'cheeses',"cheese's",'video','lot')
+custom_stop_words <- bind_rows(stop_words,
+                               tibble(word = stopwords::stopwords("en", source = "stopwords-iso"),
+                                      lexicon = "custom"))
+unnestWords2 <- dfTranscriptC %>%
+  unnest_tokens(word, textCol, token = "words", to_lower = TRUE) %>%
+  anti_join(custom_stop_words) %>% filter(!word %in% delete_words) # %>% left_join(countMonth)
+unnestWords2$id <-seq.int(nrow(unnestWords2))
+WordsCountArticle <- unnestWords2 %>% 
+  count(titleCol, word, sort = TRUE) %>%
+  ungroup()
+
+countCheese <- dfTranscriptC %>% 
+  unnest_tokens(word, textCol, token = "words", to_lower = TRUE) %>% 
+  filter(word %in% tolower(CheeseVarieties$Variety)) %>% count(word)
+
+countCheeseAll <-  dfTranscriptC %>% dplyr::summarise(textCol = paste(textCol, collapse = " "))
+# str_count(countCheeseAll$textCol[1], pattern = "brie")
+countCheeseMatrix <- as.data.frame(str_count(countCheeseAll$textCol[1], pattern = tolower(CheeseVarieties$Variety))) %>% rename(SumCheese = "str_count(countCheeseAll$textCol[1], pattern = tolower(CheeseVarieties$Variety))") %>%
+  mutate(index = seq.int(nrow(CheeseVarieties)))
+countCheeseMatrix <- CheeseVarieties %>% left_join(countCheeseMatrix) %>% 
+                        filter(SumCheese > 0) %>% arrange(desc(SumCheese))
+
+
+
 
 #### Classification ----
 set.seed(1234)
@@ -296,4 +322,12 @@ table(str_detect(dfTranscriptA$titleCol,"Ask"))["TRUE"]
 table(str_detect(dfTranscriptA$titleCol,"(?i)how | (?i)make | (?i)test | (?i)tast | (?i)ask | (?i)cheeseman"))["FALSE"]
 
 dfTranscriptB <- dfTranscriptA %>% dplyr::filter(str_detect(dfTranscriptA$titleCol,"(?i)how | (?i)making | (?i)make | (?i)test | (?i)taste | (?i)ask | (?i)cheeseman",  negate = TRUE))
+countCheeseMatrix %>% filter(SumCheese > 0) %>% arrange(desc(SumCheese))
+CheeseVarieties <- CheeseVarieties %>% mutate(index = seq.int(nrow(CheeseVarieties)))
+unite(dfTranscriptC,textCol, sep=" ")
+filter(word %in% c('mozzarella','brie')) %>% count(word)
+filter(word %in% fixed(CheeseVarieties$Variety, ignore_case = TRUE))
+str_detect(word, c('mozzarella','brie'))
+str_detect(word, fixed(c('mozzarella','brie'), ignore_case = TRUE))
 
+class(countCheese$word)
