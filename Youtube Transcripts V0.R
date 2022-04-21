@@ -1,8 +1,8 @@
 #### Set Up ----
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tune, workflows, dials, hardhat, parsnip, textrecipes, rsample, netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
+pacman::p_load(RSelenium, tune, workflows, dials, hardhat, parsnip, textrecipes, rsample, netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
 dfTranscript <- readRDS("~/YoutubeTranscript/YoutubeTranscript/dfTranscript.Rda") 
-CheeseVarieties <- read_csv("CheeseVarieties.csv")
+CheeseVarieties <- read.csv("CheeseVarieties.csv")
 
 #### Scrap ----
 # https://stackoverflow.com/questions/51014205/automating-opening-transcript-for-youtube-automatic-generated-captions
@@ -26,10 +26,10 @@ play_button$clickElement()
 # textViews <- unlist(remDr$findElement(using = 'xpath' ,'//*[@id="count"]/ytd-video-view-count-renderer/span[1]')$getElementText())
 # textDate <- unlist(remDr$findElement(using = 'css' ,".ytd-video-primary-info-renderer")$getElementText())
 # textDate <- unlist(remDr$findElement(using = 'css' ,".ytd-video-primary-info-renderer:nth-child(2)")$getElementText())
-# textDate <- unlist(remDr$findElement(using = 'xpath' ,"//span yt-formatted-string[@class = 'style-scope ytd-video-primary-info-renderer']")$getElementText())
+textDate <- unlist(remDr$findElement(using = 'xpath' ,'//*[@id="info-strings"]/yt-formatted-string')$getElementText())
 textViews <- unlist(remDr$findElement(using = 'xpath' ,"//ytd-video-view-count-renderer[@class='style-scope ytd-video-primary-info-renderer']")$getElementText())
 textTitle <- unlist(remDr$findElement(using = 'xpath' ,"//yt-formatted-string[@class = 'style-scope ytd-video-primary-info-renderer']")$getElementText())
-
+textLikes <- unlist(remDr$findElement(using = 'xpath' ,'//*[@id="top-level-buttons-computed"]/ytd-toggle-button-renderer[1]/a')$getElementText())
 
 #tocar 3 puntos
 toca3puntos <- remDr$findElement(using = 'xpath', "//button[@aria-label = 'More actions']")
@@ -46,7 +46,7 @@ remDr$navigate('https://www.youtube.com/c/GavinWebber/videos')
 
 # Scroll hasta abajo
 webElem <- remDr$findElement("css", "body")
-for (i in c(1:25)) {
+for (i in c(1:35)) {
   webElem$sendKeysToElement(list(key = "end"))
   Sys.sleep(1)
 }
@@ -64,6 +64,10 @@ get_transcript <- function(url) {
     remDr$navigate(url)
     play_button <- remDr$findElement(using = 'class', value = "ytp-play-button")$clickElement()
     Sys.sleep(1)
+    textDate <- unlist(remDr$findElement(using = 'xpath' ,'//*[@id="info-strings"]/yt-formatted-string')$getElementText())
+    Sys.sleep(1)
+    textLikes <- unlist(remDr$findElement(using = 'xpath' ,'//*[@id="top-level-buttons-computed"]/ytd-toggle-button-renderer[1]/a')$getElementText())
+    Sys.sleep(1)
     textTitle <- unlist(remDr$findElement(using = 'xpath' ,"//yt-formatted-string[@class = 'style-scope ytd-video-primary-info-renderer']")$getElementText())
     Sys.sleep(1)
     textViews <- unlist(remDr$findElement(using = 'xpath' ,"//ytd-video-view-count-renderer[@class='style-scope ytd-video-primary-info-renderer']")$getElementText())
@@ -78,13 +82,17 @@ get_transcript <- function(url) {
       titleCol = textTitle,
       viewsCol = textViews,
       textCol = textTranscript,
+      dateCol = textDate,
+      likesCol = textLikes,
       stringsAsFactors = FALSE)},
   error = function(e) NULL)
 return(dfTranscript)
 }
-
-# get_transcript('https://www.youtube.com/watch?v=9Rll3mxpfN0')
-# results <- map_df(resHref[1:2],get_transcript)
+get_transcript('https://www.youtube.com/watch?v=bs1YtV6jerQ')
+get_transcript('https://www.youtube.com/watch?v=bH-9zoWblhY')
+get_transcript('https://www.youtube.com/watch?v=4VbuBcNCgAc')
+results <- data.frame()
+results <- bind_rows(results,map(resHref[1:2],get_transcript))
 dfTranscript <- data.frame()
 dfTranscript <- bind_rows(dfTranscript,map(resHref,get_transcript))
 # WriteXLS(newsallDF, ExcelFileName = 'dfTranscript.xls')
@@ -118,19 +126,20 @@ WordsCountArticle <- unnestWords2 %>%
   count(titleCol, word, sort = TRUE) %>%
   ungroup()
 
+# Usamos Unnest y buscamos por palabras solas
 countCheese <- dfTranscriptC %>% 
   unnest_tokens(word, textCol, token = "words", to_lower = TRUE) %>% 
   filter(word %in% tolower(CheeseVarieties$Variety)) %>% count(word)
 
+# Buscamos en todo el texto el match, sirve para nombres de más de una palabra.
 countCheeseAll <-  dfTranscriptC %>% dplyr::summarise(textCol = paste(textCol, collapse = " "))
-# str_count(countCheeseAll$textCol[1], pattern = "brie")
-countCheeseMatrix <- as.data.frame(str_count(countCheeseAll$textCol[1], pattern = tolower(CheeseVarieties$Variety))) %>% rename(SumCheese = "str_count(countCheeseAll$textCol[1], pattern = tolower(CheeseVarieties$Variety))") %>%
+countCheeseMatrix <- as.data.frame(str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety),""))) %>% rename(SumCheese = "str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety), \"\"))") %>%
   mutate(index = seq.int(nrow(CheeseVarieties)))
 countCheeseMatrix <- CheeseVarieties %>% left_join(countCheeseMatrix) %>% 
                         filter(SumCheese > 0) %>% arrange(desc(SumCheese))
 
-
-
+str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety),""))
+paste(tolower(CheeseVarieties$Variety),"")
 
 #### Classification ----
 set.seed(1234)
