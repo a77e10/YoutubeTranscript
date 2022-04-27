@@ -134,7 +134,10 @@ dfTranscriptB <- dfTranscriptA %>% mutate(group=if_else(str_detect(dfTranscriptA
                                                         if_else(str_detect(dfTranscriptA$titleCol,"(?i)how|(?i)make|(?i)making|Day"), "Cheesemaking", 
                                                                 if_else(str_detect(dfTranscriptA$titleCol,"(?i)test|(?i)taste"), "Testings", "Others"))))
 dfTranscriptC <- dfTranscriptB # dejamos el C con sin filtrar y en la clasificación le agregamos la columna de group
-dfTranscriptB <- dfTranscriptB %>% filter(!group %in% c('Others'))
+dfTranscriptB <- dfTranscriptB %>% filter(!group %in% c('Others')) %>% filter(!is.na(group))
+
+dfTranscriptC %>% ggplot(aes(group)) + geom_bar()
+
 
 # Repetimos la parte de LDA
 delete_words <- c('cheese','milk', 'yeah', 'cheeses',"cheese's",'video','lot')
@@ -155,18 +158,19 @@ countCheese <- dfTranscriptC %>%
   filter(word %in% tolower(CheeseVarieties$Variety)) %>% count(word)
 
 # Buscamos en todo el texto el match, sirve para nombres de más de una palabra.
-countCheeseAll <-  dfTranscriptC %>% dplyr::summarise(textCol = paste(textCol, collapse = " "))
+countCheeseAll <-  dfTranscriptC %>% dplyr::summarise(textCol = paste(textCol, collapse = " ")) #Junto todas las filas de textoCol en una sola celda
 countCheeseMatrix <- as.data.frame(str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety),""))) %>% rename(SumCheese = "str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety), \"\"))") %>%
-  mutate(index = seq.int(nrow(CheeseVarieties)))
+  mutate(index = seq.int(nrow(CheeseVarieties))) #Hago un count de la celda de countCheeseAll contra el listado de variedades de queso, que lo paso a minúscula y le agrego un espacio en blanco "" para separ quesos de palabras que empiezan así como Butte con butter
+CheeseVarieties <- CheeseVarieties %>% mutate(index = seq.int(nrow(CheeseVarieties))) #Como están ordenadas las variedades de quesos las voy a unir en orden con la matriz que generamos (la matriz nos tira los counts por tipo de queso)
 countCheeseMatrix <- CheeseVarieties %>% left_join(countCheeseMatrix) %>% 
   filter(SumCheese > 0) %>% arrange(desc(SumCheese))
 
-str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety),""))
-paste(tolower(CheeseVarieties$Variety),"")
+# Agregamos con la columna con el queso que están preparando o que prima en la charla? 
+
 
 #### Classification ----
 set.seed(1234)
-multinews_split <- initial_split(dfTranscriptB, strata = group)
+multinews_split <- initial_split(dfTranscriptB, strata = group) # My training set no incluye Others, vamos a enseñarle las 3 clasificaciones básicas que hicimos nosotros de HOW TO / ASK / CHEESEMAKING
 multinews_train <- training(multinews_split)
 multinews_test <- testing(multinews_split)
 
@@ -234,17 +238,19 @@ finalMulti_wf <- last_fit(finalMulti_wf0, multinews_split)
 finalMulti_fitted <- finalMulti_wf0 %>% fit(training(multinews_split))
 dfTranscriptC <- predict(finalMulti_fitted,dfTranscriptC) %>%
   bind_cols(dfTranscriptC)
-saveRDS(news_bind, file = "videoPredMulti.Rda") #Guardamos el df solamente
+saveRDS(dfTranscriptC, file = "videoPredMulti.Rda") #Guardamos el df solamente
 
 
 #LDA ----
-delete_words <- c('cheese','milk', 'yeah', 'cheeses',"cheese's",'video','lot')
+delete_words <- c('cheese','milk', 'yeah', 'cheeses',"cheese's",'video','lot', 'uh', 'bit')
 custom_stop_words <- bind_rows(stop_words,
                                tibble(word = stopwords::stopwords("en", source = "stopwords-iso"),
                                       lexicon = "custom"))
 unnestWords2 <- dfTranscriptA %>%
   unnest_tokens(word, textCol, token = "words", to_lower = TRUE) %>%
   anti_join(custom_stop_words) %>% filter(!word %in% delete_words) # %>% left_join(countMonth)
+tt <- unnestWords2 %>% filter(word %in% c('bit', 'uh'))
+
 unnestWords2$id <-seq.int(nrow(unnestWords2))
 # unnestWords2 <- unnestWords2 %>% unite('id2', fecha,header,sep = '_', remove = FALSE)
 WordsCountArticle <- unnestWords2 %>% 
@@ -253,7 +259,7 @@ WordsCountArticle <- unnestWords2 %>%
 chapters_dtm <- WordsCountArticle %>%
   cast_dtm(titleCol, word, n)
 chapters_dtm
-chapters_lda <- LDA(chapters_dtm, k = 3, method = "Gibbs", control = list(seed = 1234))
+chapters_lda <- LDA(chapters_dtm, k = 4, method = "Gibbs", control = list(seed = 1234))
 chapters_lda
 chapter_topics <- tidy(chapters_lda, matrix = "beta")
 top_terms <- chapter_topics %>%
@@ -271,14 +277,18 @@ top_terms %>%
   scale_y_reordered()
 
 chapters_gamma <- tidy(chapters_lda, matrix = "gamma") %>% rename(titleCol=document)
-chapters_gamma
 chapters_gamma <- chapters_gamma %>%
   inner_join(dfTranscriptA)
-View(chapters_gamma)
-class(chapters_gamma)
 
-chapters_gamma %>% count(topic)
-
+chapters_gamma %>% filter(str_detect(titleCol, 'Ask the Cheeseman #210'))
+gammaCategories <- chapters_gamma %>% arrange(desc(gamma)) %>% 
+  distinct(titleCol, .keep_all= TRUE)
+View(gammaCategories)
+countCategories <- gammaCategories %>% count(topic)
+countCategories
+# 1 taste / 2 cheeseman Personal,Channel,Fans / 3 cheeseman Technical / 4 How to
+# Podríamos hacer una confusion matrix, pero tenemos que tener una clasificación original similar. 
+# En la 2 creo que entrarían lo que consideramos en otras cdo asignamos directamente los grupos. Pensar un poco.
 
 #AUX ----
 ?remDr$findElement()
@@ -516,3 +526,6 @@ saveRDS(dfTranscript, file = "dfTranscriptFirefox.Rda") #Guardamos el df solamen
 # 
 # Transcript <- remDr$findElement(using = 'xpath' ,"//div[@id = 'segments-container']")
 # text <- Transcript$getElementText() %>% unlist()
+
+str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety),""))
+paste(tolower(CheeseVarieties$Variety),"")
