@@ -1,3 +1,5 @@
+https://rpubs.com/Joaquin_AR/406480
+
 #### Set Up ----
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(RSelenium, tune, workflows, dials, hardhat, parsnip, textrecipes, rsample, netstat,netstat,rvest,purrr,tm,stringr,ggplot2,dplyr,tidytext,syuzhet,textdata, tidyr, data.table,WriteXLS,wordcloud,ggwordcloud,gganimate,gifski,png, topicmodels)
@@ -125,8 +127,10 @@ saveRDS(dfTranscript, file = "dfTranscriptFirefox.Rda") #Guardamos el df solamen
 # cheese list http://www.nourishinteractive.com/healthy-living/free-nutrition-articles/110-list-cheeses
 dfTranscriptA <- dfTranscript
 dfTranscriptA$textCol <- gsub("[0-9]+", "", dfTranscript$textCol) 
-dfTranscriptA$textCol <- gsub(":", "", dfTranscriptA$textCol) 
-dfTranscriptA$viewsCol <- gsub(" views", "",dfTranscriptA$viewsCol)
+dfTranscriptA$textCol <- gsub(":", "", dfTranscriptA$textCol)
+dfTranscriptA$textCol <- gsub("\n", " ", dfTranscriptA$textCol) 
+# dfTranscriptA$textCol <- gsub("[Music]", "", dfTranscriptA$textCol) 
+dfTranscriptA$viewsCol <- gsub(" vistas", "",dfTranscriptA$viewsCol) # Si se actualiza revisar si figura en español
 dfTranscriptA$viewsCol <- gsub(",", "",dfTranscriptA$viewsCol)
 dfTranscriptA$viewsCol <- as.numeric(dfTranscriptA$viewsCol)
 
@@ -137,7 +141,7 @@ dfTranscriptC <- dfTranscriptB # dejamos el C con sin filtrar y en la clasificac
 dfTranscriptB <- dfTranscriptB %>% filter(!group %in% c('Others')) %>% filter(!is.na(group))
 
 dfTranscriptC %>% ggplot(aes(group)) + geom_bar()
-
+# dfTranscriptC[[1,3]]
 
 # Repetimos la parte de LDA
 delete_words <- c('cheese','milk', 'yeah', 'cheeses',"cheese's",'video','lot')
@@ -289,6 +293,51 @@ countCategories
 # 1 taste / 2 cheeseman Personal,Channel,Fans / 3 cheeseman Technical / 4 How to
 # Podríamos hacer una confusion matrix, pero tenemos que tener una clasificación original similar. 
 # En la 2 creo que entrarían lo que consideramos en otras cdo asignamos directamente los grupos. Pensar un poco.
+
+#Bigrams #####
+unnestBigrams <- dfTranscriptC %>%
+  unnest_tokens(bigram, textCol, token = "ngrams", n = 2,to_lower = FALSE) %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>%
+  unite(bigram, word1, word2, sep = " ")
+unnestBigrams$id <-seq.int(nrow(unnestBigrams))
+
+unnestBigrams <- dfTranscriptC %>%
+  unnest_tokens(bigram, textCol, 'ngrams', n = 2) %>%    # tokenize bigrams
+  mutate(i = row_number()) %>%    # add index for later grouping
+  unnest_tokens(word, bigram, drop = FALSE) %>%    # tokenize bigrams into words
+  anti_join(custom_stop_words) %>%    # drop rows with stop words
+  group_by(i) %>%    # group by bigram index
+  filter(n() == 2) %>%    # drop bigram instances where only one word left
+  summarise(bigram = unique(bigram)) %>%    # collapse groups to single bigram each
+  count(bigram)
+
+unnestBigrams <- unnestBigrams %>% unite('id2', fecha,header,sep = '_', remove = FALSE)
+unnestBigrams %>% count(bigram) %>% arrange(desc(n))
+
+
+##Palabras Clave
+cheeses <- paste(c(tolower(CheeseVarieties$Variety)), collapse="|") # para que str_extract lea a las provincias como regex
+unnestCheese <- unnestBigrams %>% mutate(chees = str_extract(bigram,cheeses)) %>% 
+  drop_na(chees) %>% count(chees) %>% 
+  arrange(desc(n))
+unnestCheese %>%
+  mutate(share = n/sum(n)) %>% top_n(35) %>%
+  ggplot(aes(x = reorder(chees, -share), y = share, group = 1)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.2, size = 9))
+#podemos incorporar una columna con la info de pbi de cada provincia (podemos incluso comparar si las provincias que reciben más coparticipación y por ende tienen menos producción aparecen menos)
+
+#POS ####
+install.packages("cleanNLP")
+library(cleanNLP)
+cnlp_init_udpipe()
+# upos Universal POS tag
+annotation <- map_df(unnestWords2$word,cnlp_annotate)
+annotationT <- annotation$token
+
+annotationT %>% filter(upos == 'PROPN') %>% count(lemma) %>% arrange(desc(n))
+annotationT %>% filter(upos == 'NOUN') %>% count(lemma) %>% arrange(desc(n))
+annotationT %>% count(upos) %>% arrange(desc(n))
 
 #AUX ----
 ?remDr$findElement()
@@ -529,3 +578,58 @@ saveRDS(dfTranscript, file = "dfTranscriptFirefox.Rda") #Guardamos el df solamen
 
 str_count(countCheeseAll$textCol[1], pattern = paste(tolower(CheeseVarieties$Variety),""))
 paste(tolower(CheeseVarieties$Variety),"")
+
+# annotation <- cnlp_annotate(input = c(
+#   dfTranscriptC[[1,3]]
+# ))
+# annotationDF <- annotation$token
+# View(annotationDF)
+# 
+# vectTranscript <- as.vector(dfTranscriptC$titleCol)
+# annotation <- map(input = vectTranscript,cnlp_annotate)
+# 
+# res <- list()
+# annotation <- for (i in 1:588) {
+#   res[i] <- cnlp_annotate(input = c(
+#     dfTranscriptC[[i,3]]
+#   ))
+# }
+# resDF <- do.call(rbind, res)
+# 
+# unnestWords2 <- unnestWords2 %>% filter(!is.na(word))
+# annotation <- map(unnestWords2,cnlp_annotate)
+
+
+
+annotation2 <- as.data.frame(lapply(annotation, unlist))
+annotationDF <- annotation$token
+annotationDF <- as.data.frame(do.call(cbind, annotationDF))
+annotationDF <- as.data.frame(do.call(cbind, annotation))
+
+
+tryCatch( {
+  for (i in 1:588) {
+  res[i] <- cnlp_annotate(input = c(
+    dfTranscriptC[[i,3]] )) } },
+error = function(e) NULL)
+
+
+class(cnlp_annotate)
+class((list(dfTranscriptC$titleCol)))
+
+PalabrasClave <- c('CFK', 'Kirchner', 'Néstor', 'Cristina Fernandez', 'Cristina')
+PalabrasClaveReg <- paste(PalabrasClave, collapse="|") 
+BigramsPalabrasClave <- unnestBigrams %>% 
+  mutate(term = str_extract(bigram, PalabrasClaveReg)) %>%
+  drop_na(term) %>% distinct(id2, .keep_all = TRUE) %>% count(Year)
+
+ecoPositivas <- c('estabilidad', 'empleo', 'equilibrio', 'seguridad', 'producción') #seguridad debe usarse mucho como problemas de seguridad
+ecoPositivasReg <- paste(c('estabilidad', 'empleo', 'equilibrio', 'seguridad', 'producción', 'economía'), collapse="|") 
+ecoNegativas <- c('inflación', 'deuda', 'crisis', 'desequilibrio', 'desempleo', 'inseguridad', 'delito', 'quiebra', 'convocatoria', 'huida', 'corrida')
+ecoNegativasReg <- paste(c('inflación', 'deuda', 'crisis', 'desequilibrio', 'desempleo', 'inseguridad', 'delito', 'quiebra', 'convocatoria', 'huida', 'corrida'), collapse="|") 
+BigramsPosAnio2 <- unnestBigrams %>% 
+  mutate(term = str_extract(bigram, ecoPositivasReg)) %>% filter(!str_extract(bigram, ecoNegativasReg) %in% ecoNegativas) %>%
+  drop_na(term) %>% count(Year, name = "ConteoSigno") %>% mutate(tipo = "Positivas") %>%
+  left_join(countYear) %>% mutate(ratio = ConteoSigno/cuentaYear)
+
+
